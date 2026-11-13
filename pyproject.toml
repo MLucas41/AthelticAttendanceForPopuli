@@ -1,0 +1,18 @@
+[project]
+name = "lukeattendanceautomation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "python-dotenv>=1.2.3",
+    "pywin32>=312",
+    "requests>=2.34.2",
+]
+
+[project.scripts]
+lukeattendanceautomation = "lukeattendanceautomation:main"
+
+[build-system]
+requires = ["uv_build>=0.12.9,<0.13.0"]
+build-backend = "uv_build"

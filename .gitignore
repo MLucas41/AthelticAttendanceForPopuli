@@ -1,0 +1,27 @@
+# Secrets
+.env
+*.key
+secrets.*
+config.local.*
+
+# Student data (FERPA-sensitive)
+RosterCSVs/
+*.csv
+*.xlsx
+*.json
+
+# Python / uv
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editors and OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Logs and output
+*.log
+output/
