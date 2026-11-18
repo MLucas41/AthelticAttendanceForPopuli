@@ -42,6 +42,8 @@ SKIP_COURSES = {"chapel"}
 # Converts Populi's two-letter day codes to Python weekday numbers (Monday = 0 ... Sunday = 6)
 DAY_CODES = {"mo": 0, "tu": 1, "we": 2, "th": 3, "fr": 4, "sa": 5, "su": 6}
 
+_players_by_id = {}   # Populi ID -> Player, so each schedule is downloaded once
+
 def subsequentAccessTest():
     "The thing the thing"
 
@@ -138,10 +140,24 @@ def load_players(team):
             _player_cache[team] = build_players(csv.DictReader(f), TERM_ID)
     return _player_cache[team]
 
+def load_players_from_trip(trip):
+    players = []
+    for entry in trip.players:
+        pid = entry["id"]
+        if pid not in _players_by_id:
+            p = Player(populi_id=pid, first=entry["first"], last=entry["last"])
+            for c in PopuliPuller.GetTermScheduleFromPopuliID(pid, TERM_ID):
+                p.courses.append(Course.from_raw(c["name"], c["offering_id"], c["days"], c["start"], c["end"]))
+            _players_by_id[pid] = p
+        players.append(_players_by_id[pid])
+    return players
+
+def generate_drafts_for_trip(trip):
+    return generate_drafts_for_players(load_players_from_trip(trip), trip.start, trip.end)
 # ---------------------------------------------------------------------------
 # Generates email drafts based on the professor, rather than the classes
 # ---------------------------------------------------------------------------
-def generate_drafts(team, trip_start, trip_end):
+def generate_drafts_for_players(team, trip_start, trip_end):
     """Return one draft per professor (or per course, when no professor email exists)."""
     players = load_players(team)
     conflicts = find_conflicts(players, trip_start, trip_end)
