@@ -9,7 +9,6 @@ Two ways to say who is traveling and when:
   2. Leave the file empty, pick a team, and type the dates by hand.
 
 Run with:  uv run app.py
-Optional drag-and-drop:  uv add tkinterdnd2   (Browse works without it)
 """
 
 import os
@@ -25,16 +24,7 @@ from urllib.parse import quote
 import ConflictEmailGenerator as core
 import FormImport
 
-# Drag-and-drop isn't built into tkinter. If tkinterdnd2 is installed we use it;
-# if not, everything still works through the Browse button.
-try:
-    from tkinterdnd2 import DND_FILES, TkinterDnD
-
-    _Base = TkinterDnD.Tk
-    HAS_DND = True
-except ImportError:
-    _Base = tk.Tk
-    HAS_DND = False
+_Base = tk.Tk
 
 FMT = "%Y-%m-%d %H:%M"   # manual date entry, 24-hour, e.g. 2026-10-23 13:00
 
@@ -76,12 +66,9 @@ class App(_Base):
         box.grid(row=0, column=0, sticky="ew", padx=10, pady=(10, 0))
         box.columnconfigure(0, weight=1)
 
-        hint = "Drop the .xlsx file here" if HAS_DND else "Click Browse to pick the .xlsx file"
+        hint = "Click Browse to pick the .xlsx file"
         self.drop = tk.Label(box, text=hint, relief="groove", height=3)
         self.drop.grid(row=0, column=0, columnspan=3, sticky="ew")
-        if HAS_DND:
-            self.drop.drop_target_register(DND_FILES)
-            self.drop.dnd_bind("<<Drop>>", self._on_drop)
 
         ttk.Button(box, text="Browse...", command=self.browse).grid(row=1, column=1, padx=5, pady=(6, 0))
         ttk.Button(box, text="Clear", command=self.clear_trip).grid(row=1, column=2, pady=(6, 0))
@@ -201,7 +188,7 @@ class App(_Base):
         self.trip_pick.config(state="disabled", values=[])
         self.trip_pick.set("")
         self.trip_info.config(text="")
-        self.drop.config(text="Drop the .xlsx file here" if HAS_DND else "Click Browse to pick the .xlsx file")
+        self.drop.config(text="Click Browse to pick the .xlsx file")
         self._set_manual_state(True)
 
     def _set_manual_state(self, enabled):
