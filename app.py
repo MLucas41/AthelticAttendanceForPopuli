@@ -288,7 +288,7 @@ class App(_Base):
                 messagebox.showerror("No team", "Pick a team, or load a trip file.")
                 return
             def job():
-                drafts = core.generate_drafts(team, start, end)
+                drafts = core.generate_drafts_for_players(team, start, end)
                 return drafts, core.load_players(team), (start, end)
 
             msg = "Loading schedules from Populi (the first run for a team is slow)..."
@@ -356,7 +356,8 @@ class App(_Base):
         if not d["to"]:
             messagebox.showwarning("No email", "Populi has no email for this professor. Send it manually.")
             return
-        webbrowser.open(f"mailto:{d['to']}?subject={quote(d['subject'])}&body={quote(d['body'])}")
+        core.openSelectedInMailApp(d['to'], d['subject'], d['body'])
+        #webbrowser.open(f"mailto:{d['to']}?subject={quote(d['subject'])}&body={quote(d['body'])}")
 
 
 def missed_sessions(player, window):

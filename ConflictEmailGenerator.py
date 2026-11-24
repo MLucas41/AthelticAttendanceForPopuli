@@ -65,6 +65,16 @@ def _testDraftCount():
 
     return
 
+def openSelectedInMailApp(to, subject, body):
+    outlook = win32com.client.Dispatch("Outlook.Application")
+
+    mail = outlook.CreateItem(0)
+    mail.To = to
+    mail.Subject = subject
+    mail.Body = body
+    mail.Save()
+    mail.Display()
+
 def _test_draft_saving():
     outlook = win32com.client.Dispatch("Outlook.Application")
     print("Outlook version:", outlook.Version)
