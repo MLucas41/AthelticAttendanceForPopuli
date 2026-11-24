@@ -1,0 +1,286 @@
+API CALLS
+
+baseball api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434648"
+                    },
+                    "positive": "1"
+                }
+            ]
+        }
+    }
+}
+
+men's basketball api call 
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434654"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+women's basketball api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434660"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+beach volleyball api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434666"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+cross country mens api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434672"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+cross country womens api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434678"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+golf mens api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434684"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+golf womens api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434690"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+soccer mens api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434708"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+soccer womens api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434714"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+softball api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434720"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+track mens api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434726"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+track womens api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434732"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+volleyball api call
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "438518"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}
+
+wrestling mens
+{
+    "filter": {
+        "0": {
+            "logic": "ALL",
+            "fields": [
+                {
+                    "name": "custom_field",
+                    "value": {
+                        "custom_info_field_id": "200018",
+                        "choice": "434744"
+                    },
+                    "positive": 1
+                }
+            ]
+        }
+    }
+}

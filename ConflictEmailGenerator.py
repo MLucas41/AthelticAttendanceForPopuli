@@ -162,16 +162,49 @@ def load_players_from_trip(trip):
         players.append(_players_by_id[pid])
     return players
 
+def display_team(team):
+    """Turn a roster file name into a name for emails: "Basketball - Men's" -> "Men's Basketball"."""
+    if not team:
+        return team
+    sport, sep, gender = team.partition(" - ")
+    return f"{gender.strip()} {sport.strip()}" if sep else team
+
+def team_for_players(player_ids, hint=""):
+    """Work out which team a trip is for by matching its players against the roster CSVs.
+
+    Returns the roster name (e.g. "Basketball - Men's") with the most of these
+    players on it, or None if no roster contains any of them. If two rosters tie
+    (e.g. cross country and track share runners), the one whose name contains
+    `hint` (the first word of the Forms file name) wins; otherwise None.
+    """
+    ids = {str(i).strip() for i in player_ids}
+    counts = {}
+    for path in ROSTER_DIR.glob("*.csv"):
+        with open(path, newline="", encoding="utf-8-sig") as f:
+            roster = {str(r.get("Person Populi ID", "")).strip() for r in csv.DictReader(f)}
+        counts[path.stem] = len(ids & roster)
+    best = max(counts.values(), default=0)
+    if best == 0:
+        return None
+    top = [team for team, n in counts.items() if n == best]
+    if len(top) == 1:
+        return top[0]
+    matching = [t for t in top if hint and hint.lower() in t.lower()]
+    return matching[0] if len(matching) == 1 else None
+
 def generate_drafts_for_trip(trip):
     """Drafts for a trip loaded from the Forms export (players come from the file, not a roster CSV).
 
-    The team name comes from the file name (see FormImport.team_from_filename).
+    The team is found by matching the trip's players against the roster CSVs,
+    falling back to the first word of the file name if that doesn't settle it.
     """
-    return build_drafts(load_players_from_trip(trip), trip.start, trip.end, trip.team or None)
+    team = team_for_players((p["id"] for p in trip.players), hint=trip.team)
+    label = display_team(team) if team else (trip.team or None)
+    return build_drafts(load_players_from_trip(trip), trip.start, trip.end, label)
 
 def generate_drafts_for_players(team, trip_start, trip_end):
     """Drafts for a whole team picked by name (players come from RosterCSVs/<team>.csv)."""
-    return build_drafts(load_players(team), trip_start, trip_end, team)
+    return build_drafts(load_players(team), trip_start, trip_end, display_team(team))
 
 # ---------------------------------------------------------------------------
 # Generates email drafts based on the professor, rather than the classes
