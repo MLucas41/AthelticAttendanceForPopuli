@@ -15,6 +15,7 @@ Needs openpyxl:  uv add openpyxl
 import re
 from dataclasses import dataclass, field
 from datetime import date, datetime, time
+from pathlib import Path
 
 import openpyxl
 
@@ -48,6 +49,7 @@ class Trip:
     start: datetime
     end: datetime
     warnings: list[str] = field(default_factory=list)
+    team: str = ""                    # taken from the file name, e.g. "Baseball Travel Roster.xlsx" -> "Baseball"
 
     @property
     def label(self):
@@ -55,8 +57,9 @@ class Trip:
         d0, d1 = self.start.strftime("%b %d"), self.end.strftime("%b %d")
         dates = d0 if self.start.date() == self.end.date() else f"{d0} - {d1}"
         who = f"{self.submitted_by}: " if self.submitted_by else ""
+        team = f"{self.team} " if self.team else ""
         n = len(self.players)
-        return f"Row {self.row}: {who}{dates} ({n} player{'' if n == 1 else 's'})"
+        return f"Row {self.row}: {team}{who}{dates} ({n} player{'' if n == 1 else 's'})"
 
 
 def parse_players(cell):
@@ -113,8 +116,20 @@ def _find_columns(headers):
     return found
 
 
+def team_from_filename(path):
+    """The team name is the first word of the file name.
+
+    "Baseball Travel Roster.xlsx" -> "Baseball". Underscores also count as
+    spaces, since Forms exports name files like "Baseball_Travel_Roster.xlsx".
+    Returns "" if the name is empty.
+    """
+    words = Path(path).stem.replace("_", " ").split()
+    return words[0] if words else ""
+
+
 def load_trips(path):
     """Read every response in the export and return a list of Trip objects."""
+    team = team_from_filename(path)
     wb = openpyxl.load_workbook(path, data_only=True)
     rows = list(wb.active.iter_rows(values_only=True))
     if len(rows) < 2:
@@ -144,7 +159,7 @@ def load_trips(path):
         if "who" in cols and row[cols["who"]]:
             who = str(row[cols["who"]]).strip()
 
-        trips.append(Trip(row_num, who, players, start, end, warnings))
+        trips.append(Trip(row_num, who, players, start, end, warnings, team))
     return trips
 
 
@@ -153,6 +168,7 @@ if __name__ == "__main__":
 
     for trip in load_trips(sys.argv[1]):
         print(trip.label)
+        print("  team:", trip.team or "(none)")
         print("  from", trip.start, "to", trip.end)
         for p in trip.players:
             print("  ", p["id"], p["last"], "|", p["first"])

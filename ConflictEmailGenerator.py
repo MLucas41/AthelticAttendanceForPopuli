@@ -163,14 +163,27 @@ def load_players_from_trip(trip):
     return players
 
 def generate_drafts_for_trip(trip):
-    return generate_drafts_for_players(load_players_from_trip(trip), trip.start, trip.end)
+    """Drafts for a trip loaded from the Forms export (players come from the file, not a roster CSV).
+
+    The team name comes from the file name (see FormImport.team_from_filename).
+    """
+    return build_drafts(load_players_from_trip(trip), trip.start, trip.end, trip.team or None)
+
+def generate_drafts_for_players(team, trip_start, trip_end):
+    """Drafts for a whole team picked by name (players come from RosterCSVs/<team>.csv)."""
+    return build_drafts(load_players(team), trip_start, trip_end, team)
+
 # ---------------------------------------------------------------------------
 # Generates email drafts based on the professor, rather than the classes
 # ---------------------------------------------------------------------------
-def generate_drafts_for_players(team, trip_start, trip_end):
-    """Return one draft per professor (or per course, when no professor email exists)."""
-    players = load_players(team)
+def build_drafts(players, trip_start, trip_end, team=None):
+    """Return one draft per professor (or per course, when no professor email exists).
+
+    players: list of Player objects (already loaded)
+    team:    team name for the subject line, or None if unknown (e.g. a Forms trip)
+    """
     conflicts = find_conflicts(players, trip_start, trip_end)
+    travel = f"travel for {team}" if team else "travel"
 
     # Group the conflicts by professor email
     groups = {}   # key -> {"faculty": dict, "courses": [(course_name, students), ...]}
@@ -191,10 +204,10 @@ def generate_drafts_for_players(team, trip_start, trip_end):
 
         if n == 1:
             label = courses[0][0]                        # course name, as before
-            subject = f"Athletic absences due to travel for {team}: from {format_date_range(trip_start, trip_end)} in {courses[0][0]}"
+            subject = f"Athletic absences due to {travel}: from {format_date_range(trip_start, trip_end)} in {courses[0][0]}"
         else:
             label = f"{last or faculty.get('name') or 'Unknown professor'} ({n} courses)"
-            subject = f"Athletic absences due to travel for {team}: from {format_date_range(trip_start, trip_end)}"
+            subject = f"Athletic absences due to {travel}: from {format_date_range(trip_start, trip_end)}"
 
         drafts.append({
             "course": label,       # shown in the app's list (key name kept so app.py is unchanged)
